@@ -9,12 +9,32 @@ export default function Main({ results }) {
     ko: "KR",
     zh: "CN",
   };
+
+  const renderStars = (vote) => {
+    const rating = Math.round(vote / 2); // Da 1–10 a 1–5
+    const maxStars = 5;
+
+    return (
+      <>
+        {[...Array(maxStars)].map((_, index) =>
+          index < rating ? (
+            <FaStar key={index} color="gold" />
+          ) : (
+            <FaRegStar key={index} color="gray" />
+          )
+        )}
+      </>
+    );
+  };
   return (
     <>
       {results.map((res) => {
         const lang = res.original_language?.toLowerCase();
         const countryCode = languageToCountry[lang] || null;
         const isMovie = res.title !== undefined;
+
+        const rating = Math.round(res.vote_average / 2);
+        const maxStars = 5;
 
         return (
           <div key={res.id} className="container">
@@ -42,7 +62,10 @@ export default function Main({ results }) {
                   height="16"
                   style={{ objectFit: "contain", verticalAlign: "middle" }}
                 />
-                <p>Voto: {res.vote_average}</p>
+                <p>
+                  Voto: {"⭐".repeat(rating)}
+                  {"☆".repeat(maxStars - rating)}
+                </p>
                 <p>Tipo: {isMovie ? "Film" : "Serie TV"}</p>
               </li>
             </ul>
