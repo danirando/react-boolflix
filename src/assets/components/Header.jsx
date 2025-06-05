@@ -34,13 +34,14 @@ export default function Header({ onResults }) {
 
   return (
     <>
-      <form onSubmit={handleFormSubmit}>
+      <form className="d-flex gap-3" onSubmit={handleFormSubmit}>
         <input
+          className="form-control"
           value={searchedWord}
           onChange={(e) => setSearchedWord(e.target.value)}
           type="text"
         />
-        <button>Cerca</button>
+        <button className="btn btn-secondary">Cerca</button>
       </form>
     </>
   );

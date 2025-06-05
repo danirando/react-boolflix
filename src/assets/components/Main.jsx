@@ -27,51 +27,55 @@ export default function Main({ results }) {
     );
   };
   return (
-    <>
-      {results.map((res) => {
-        const lang = res.original_language?.toLowerCase();
-        const countryCode = languageToCountry[lang] || null;
-        const isMovie = res.title !== undefined;
+    <div className="container">
+      <div className="row">
+        {results.map((res) => {
+          const lang = res.original_language?.toLowerCase();
+          const countryCode = languageToCountry[lang] || null;
+          const isMovie = res.title !== undefined;
+          const rating = Math.round(res.vote_average / 2);
+          const maxStars = 5;
 
-        const rating = Math.round(res.vote_average / 2);
-        const maxStars = 5;
-
-        return (
-          <div key={res.id} className="container">
-            <ul>
-              <li>
-                <h1>{isMovie ? res.title : res.name}</h1>
+          return (
+            <div key={res.id} className="col-4 mb-4">
+              <div className="card-wrapper h-100">
                 <img
-                  src={`https://image.tmdb.org/t/p/w154/${res.poster_path}`}
-                  alt=""
+                  src={`https://image.tmdb.org/t/p/w342/${res.poster_path}`}
+                  alt={isMovie ? res.title : res.name}
+                  className="poster-img"
                 />
-                <h2>
-                  Titolo Originale:{" "}
-                  {isMovie ? res.original_title : res.original_name}
-                </h2>
-                <img
-                  className="flag"
-                  src={`https://flagsapi.com/${countryCode}/flat/24.png`}
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src =
-                      "/Flag_of_the_Rest_of_the_World_(Eurovision).svg.png";
-                  }}
-                  alt={`${countryCode} flag`}
-                  width="24"
-                  height="16"
-                  style={{ objectFit: "contain", verticalAlign: "middle" }}
-                />
-                <p>
-                  Voto: {"⭐".repeat(rating)}
-                  {"☆".repeat(maxStars - rating)}
-                </p>
-                <p>Tipo: {isMovie ? "Film" : "Serie TV"}</p>
-              </li>
-            </ul>
-          </div>
-        );
-      })}
-    </>
+                <div className="card-overlay">
+                  <h5>{isMovie ? res.title : res.name}</h5>
+                  <p>
+                    Titolo Originale:{" "}
+                    {isMovie ? res.original_title : res.original_name}
+                  </p>
+                  <p>Lingua: {lang.toUpperCase()}</p>
+                  <p>
+                    Voto: {"⭐".repeat(rating)}
+                    {"☆".repeat(maxStars - rating)}
+                  </p>
+                  <p>Tipo: {isMovie ? "Film" : "Serie TV"}</p>
+                  {countryCode && (
+                    <img
+                      className="flag"
+                      src={`https://flagsapi.com/${countryCode}/flat/24.png`}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src =
+                          "/Flag_of_the_Rest_of_the_World_(Eurovision).svg.png";
+                      }}
+                      alt={`${countryCode} flag`}
+                      width="24"
+                      height="16"
+                    />
+                  )}
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
   );
 }
