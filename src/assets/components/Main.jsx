@@ -2,7 +2,7 @@ export default function Main({ results }) {
   return (
     <>
       {results.map((res) => (
-        <div className="continer">
+        <div key={res.id} className="continer">
           <ul>
             <li>
               <h1>{res.title}</h1>

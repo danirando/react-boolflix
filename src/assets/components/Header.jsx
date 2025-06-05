@@ -1,35 +1,39 @@
 import axios from "axios";
-import { useState } from "react"
+import { useState } from "react";
 
 const apiUrl = import.meta.env.VITE_API_URL;
-const apiKey = import.meta.env.VITE_API_KEY
+const apiKey = import.meta.env.VITE_API_KEY;
 
+export default function Header({ onResults }) {
+  const [searchedWord, setSearchedWord] = useState("");
+  const [formData, setFormData] = useState("");
+  const [results, setResults] = useState([]);
 
-
-export default function Header ({onResults}) {
-
-const [searchedWord, setSearchedWord] = useState("")
-const [formData, setFormData] = useState("")
-const [results, setResults] = useState([])
-
-const handleFormSubmit =(e) => {
+  const handleFormSubmit = (e) => {
     e.preventDefault();
-    setFormData({ ...formData, search: searchedWord })
+    setFormData({ ...formData, search: searchedWord });
     const filmApiCall = (searchedWord) => {
-    axios.get(`${apiUrl}?api_key=${apiKey}&query=${searchedWord}`).then(res => {
-        onResults(res.data.results); // Passa i risultati al genitore
-      })
-    
-}
+      axios
+        .get(`${apiUrl}?api_key=${apiKey}&query=${searchedWord}&language=it-IT`)
+        .then((res) => {
+          onResults(res.data.results); // Passa i risultati al genitore
+        });
+    };
 
-filmApiCall(searchedWord)
-  return(searchedWord);
-}
+    filmApiCall(searchedWord);
+    return searchedWord;
+  };
 
-    return (<>
-    <form onSubmit={handleFormSubmit}>
-        <input value={searchedWord} onChange={(e) => setSearchedWord (e.target.value)} type="text" />
+  return (
+    <>
+      <form onSubmit={handleFormSubmit}>
+        <input
+          value={searchedWord}
+          onChange={(e) => setSearchedWord(e.target.value)}
+          type="text"
+        />
         <button>Cerca</button>
-    </form>
-    </>)
+      </form>
+    </>
+  );
 }
