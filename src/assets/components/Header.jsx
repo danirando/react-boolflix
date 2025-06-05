@@ -7,21 +7,29 @@ const apiKey = import.meta.env.VITE_API_KEY;
 export default function Header({ onResults }) {
   const [searchedWord, setSearchedWord] = useState("");
   const [formData, setFormData] = useState("");
-  const [results, setResults] = useState([]);
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     setFormData({ ...formData, search: searchedWord });
-    const filmApiCall = (searchedWord) => {
-      axios
-        .get(`${apiUrl}?api_key=${apiKey}&query=${searchedWord}&language=it-IT`)
-        .then((res) => {
-          onResults(res.data.results); // Passa i risultati al genitore
-        });
-    };
 
-    filmApiCall(searchedWord);
-    return searchedWord;
+    try {
+      const [filmRes, seriesRes] = await Promise.all([
+        axios.get(
+          `${apiUrl}?api_key=${apiKey}&query=${searchedWord}&language=it-IT`
+        ),
+        axios.get(
+          `https://api.themoviedb.org/3/search/tv?api_key=${apiKey}&query=${searchedWord}&language=it`
+        ),
+      ]);
+
+      const combinedResults = [
+        ...filmRes.data.results,
+        ...seriesRes.data.results,
+      ];
+      onResults(combinedResults);
+    } catch (err) {
+      console.error("Errore nella ricerca:", err);
+    }
   };
 
   return (
