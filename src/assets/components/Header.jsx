@@ -34,15 +34,23 @@ export default function Header({ onResults }) {
 
   return (
     <>
-      <form className="d-flex gap-3" onSubmit={handleFormSubmit}>
-        <input
-          className="form-control"
-          value={searchedWord}
-          onChange={(e) => setSearchedWord(e.target.value)}
-          type="text"
-        />
-        <button className="btn btn-secondary">Cerca</button>
-      </form>
+      <div className="container">
+        <header>
+          {" "}
+          <form
+            className="d-flex gap-3 justify-content-between"
+            onSubmit={handleFormSubmit}>
+            <h1>BOOLFLIX</h1>
+            <input
+              className="form-control"
+              value={searchedWord}
+              onChange={(e) => setSearchedWord(e.target.value)}
+              type="text"
+            />
+            <button className="btn btn-secondary">Cerca</button>
+          </form>
+        </header>
+      </div>
     </>
   );
 }
